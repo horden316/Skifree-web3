@@ -1,0 +1,263 @@
+
+<html>
+    <head>
+        <title>SkiFree</title>
+		<link type="text/css" rel="stylesheet" href="css/skifree.css" />
+    </head>
+
+
+
+    <body>
+	<div class="topview">
+		<button id="contract_address_btn">Connect Wallet</button>
+		<button onclick="NFT0choose()" style="DISPLAY:none" id="NFT0_btn"><img src="images/btn_image/spritemap_up_blue_down_blue.png">#0</button>
+		<button onclick="NFT1choose()" style="DISPLAY:none" id="NFT1_btn"><img src="images/btn_image/spritemap_up_red_down_blue.png">#1</button>
+		<button onclick="NFT2choose()" style="DISPLAY:none" id="NFT2_btn"><img src="images/btn_image/spritemap_up_yellow_down_blue.png">#2</button>
+
+		<!--0_0就是TokenID 0的NFT配上沒有滑板-->
+		<!--0_1就是TokenID 0的NFT配上紅色滑板-->
+		<button onclick="NFT0chooseBlue()" style="DISPLAY:none" id="0_0_btn"><img src="images/btn_image/spritemap_up_blue_down_blue.png">No skiboard</button>
+		<button style="DISPLAY:none" id="0_1_btn"><img src="images/btn_image/spritemap_up_blue_down_red.png">Red skiboard</button>
+		<button style="DISPLAY:none" id="0_2_btn"><img src="images/btn_image/spritemap_up_blue_down_yellow.png">Yellow skiboard</button>
+
+		<button onclick="NFT1chooseBlue()" style="DISPLAY:none" id="1_0_btn"><img src="images/btn_image/spritemap_up_red_down_blue.png">No skiboard</button>
+		<button style="DISPLAY:none" id="1_1_btn"><img src="images/btn_image/spritemap_up_red_down_red.png">Red skiboard</button>
+		<button style="DISPLAY:none" id="1_2_btn"><img src="images/btn_image/spritemap_up_red_down_yellow.png">Yellow skiboard</button>
+
+		<button onclick="NFT2chooseBlue()" style="DISPLAY:none" id="2_0_btn"><img src="images/btn_image/spritemap_up_yellow_down_blue.png">No skiboard</button>
+		<button style="DISPLAY:none" id="2_1_btn"><img src="images/btn_image/spritemap_up_yellow_down_red.png">Red skiboard</button>
+		<button style="DISPLAY:none" id="2_2_btn"><img src="images/btn_image/spritemap_up_yellow_down_yellow.png">Yellow skiboard</button>
+
+
+		<input type="text" id="mytext">
+	</div>
+
+		<div id="wrapper">
+			<h1>SkiFree Web3 Ver.</h1>
+			
+			<canvas width="360" height="480" id="canva"></canvas>
+			
+
+			
+			<p>Edited by Horden Chan</a></p>
+
+			
+		</div>
+
+
+
+
+        <script>canva.style.display="none";</script>
+        <!-- Google Analytics -->
+        <script type="text/javascript">
+          var _gaq = _gaq || [];
+          _gaq.push(['_setAccount', 'UA-11438002-1']);
+          _gaq.push(['_setDomainName', '.coderonfire.com']);
+          _gaq.push(['_trackPageview']);
+
+          (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+          })();
+
+        </script>
+
+	<!-- 下面是web3.js的部分 -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0-beta1/js/bootstrap.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script>
+	<script src="Stickman_ABI.js"></script>
+	<script src="Stickman_Contract.js"></script>
+	<script>
+		var web3;
+		var Stickman_contract = null;
+		$(async function () {
+			console.log("ethereum", window.ethereum);
+			if (typeof window.ethereum !== "undefined") {
+				//檢查瀏覽器是否已安裝MetaMask
+				try {
+					//var accounts = await ethereum.enable(); //MetaMask請求用戶授權, 舊版的用法未來會停用
+					var accounts = await ethereum.request({
+						method: "eth_requestAccounts",
+					}); //MetaMask請求用戶授權, 連結會登入到MetaMask
+					console.log("accounts", accounts);
+
+					//web3 = new Web3(web3.currentProvider);  //web3初始化, 設定Provider為MetaMask提供的Provider, 舊版的用法未來會停用
+					web3 = new Web3(window.ethereum); //web3初始化
+
+					updateWeb3Information();
+					updateWeb3Account(accounts[0]);
+				} catch (error) {
+					alert(error.message);
+				}
+			} else {
+				alert("未安裝 MetaMask!");
+			}
+		});
+
+		//MetaMask連結區塊鏈
+		ethereum.on("connect", async function (connectInfo) {
+			console.log("connect", connectInfo);
+			let chain = "(" + connectInfo.chainId + ")" + getChainNameByID(connectInfo.chainId);
+			$("#chain").val(chain);
+		});
+
+		//MetaMask切換網路
+		ethereum.on("chainChanged", function (chainId) {
+			console.log("chain id", chainId);
+			window.location.reload();
+		});
+
+		//MetaMask切換帳戶
+		ethereum.on("accountsChanged", function (accounts) {
+			console.log("accountsChanged", accounts);
+			updateWeb3Account(accounts[0]);
+		});
+
+		//根據Chain ID取得網路名稱
+		function getChainNameByID(chainid) {
+			switch (chainid) {
+				case "0x1":
+					return "Ethereum Main Network";
+				case "0x3":
+					return "Ropsten Test Network";
+				case "0x4":
+					return "Rinkeby Test Network";
+				case "0x5":
+					return "Goerli Test Network";
+				case "0x2a":
+					return "Kovan Test Network";
+				default:
+					return "Unknown Network";
+			}
+		}
+
+		//更新web3資訊
+		async function updateWeb3Information() {
+			$("#web3_version").html(web3.version);
+			console.log("providers", web3.providers);
+			console.log("given provider", web3.givenProvider);
+
+			var block_number = await web3.eth.getBlockNumber(); //查詢目前的區塊編號
+			console.log("Block Number", block_number);
+			$("#block_number").val(block_number);
+		}
+
+		//更新帳戶資料
+		function updateWeb3Account(account) {
+			web3.eth.defaultAccount = account; //設定web3使用的帳戶 web3.eth.defaultAccount就是登入的地址
+			$('#account').val(account)
+		}
+
+		//連結合約（按下進入遊戲按鈕後）
+		$("#contract_address_btn").click(async function () {
+			var contract_address = "0xB410A146f8730c486fEef810146d4351a6139fF5"
+			console.log("contract_address", contract_address);
+			if (contract_address) {
+				 contract = createContract(contract_address);
+				//$("#contract_address").attr("readonly", true);
+			//	$("#contract_address_btn").attr("disabled", true);
+			}
+		});
+
+		//建立智能合約實體
+		function createContract(address) {
+			Stickman_contract = new web3.eth.Contract(Stickman_ABI, address, {});
+			console.log("contract", Stickman_contract);
+			UpdateContractData();
+			getTokenData();
+		}
+		async function UpdateContractData() {
+			//查詢代幣的名稱
+			var name = await contract_name(Stickman_contract);
+			console.log("contract_name", name);
+
+			//查詢代幣的代稱
+			var symbol = await contract_symbol(Stickman_contract);
+			console.log("contract_symbol", symbol);
+		}
+
+		let WhichTokenOwner = new Array(3);
+		async function getTokenData() {
+
+			for(var i=0;i<3;i++){
+
+				WhichTokenOwner[i] = await contract_token_owner(Stickman_contract,i);
+			}
+
+			for(var i=0;i<3;i++) {
+				console.log(web3.eth.defaultAccount);
+				if((WhichTokenOwner[i]!=undefined)&&(WhichTokenOwner[i]==web3.eth.defaultAccount)) {//判斷每一個Token有沒有Owner，還有判斷現在連結錢包的是不是就是Owner
+					console.log("You have No." + i + " Token");
+					document.getElementById("NFT" + i + "_btn").style.display = "block"; //顯示有的NFT的按鈕
+				}
+			}
+		}
+
+
+	</script>
+
+
+	<script>
+		//選擇角色及滑雪板用～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～～
+		var spriteMapImgSrc2 = 'images/spritemap.png'
+
+		function NFT0choose(){
+			document.getElementById("NFT0_btn").style.display = "none";
+			document.getElementById("NFT1_btn").style.display = "none";
+			document.getElementById("NFT2_btn").style.display = "none";
+			document.getElementById("0_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
+
+
+			//拿到1155合約後記得修改
+		}
+
+		function NFT0chooseBlue(){//NFT0+藍滑雪板
+			document.getElementById("0_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
+			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+		function NFT1chooseBlue(){//NFT1+藍滑雪板
+			document.getElementById("1_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
+			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT2chooseBlue(){//NFT1+藍滑雪板
+			document.getElementById("1_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
+			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT1choose(){
+			document.getElementById("NFT0_btn").style.display = "none";
+			document.getElementById("NFT1_btn").style.display = "none";
+			document.getElementById("NFT2_btn").style.display = "none";
+			document.getElementById("1_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
+			//拿到1155合約後記得修改
+		}
+
+		function NFT2choose(){
+			document.getElementById("NFT0_btn").style.display = "none";
+			document.getElementById("NFT1_btn").style.display = "none";
+			document.getElementById("NFT2_btn").style.display = "none";
+			document.getElementById("2_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
+			//拿到1155合約後記得修改
+		}
+
+		function CurrentspriteMapImg(){
+			return spriteMapImgSrc2;
+		}
+	</script>
+
+	<!-- Load in the JavaScript -->
+	<script type="text/javascript" src="skifree.js"></script>
+
+    </body>
+</html>
