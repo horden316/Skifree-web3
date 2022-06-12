@@ -17,16 +17,16 @@
 		<!--0_0就是TokenID 0的NFT配上沒有滑板-->
 		<!--0_1就是TokenID 0的NFT配上紅色滑板-->
 		<button onclick="NFT0chooseBlue()" style="DISPLAY:none" id="0_0_btn"><img src="images/btn_image/spritemap_up_blue_down_blue.png">No skiboard</button>
-		<button style="DISPLAY:none" id="0_1_btn"><img src="images/btn_image/spritemap_up_blue_down_red.png">Red skiboard</button>
-		<button style="DISPLAY:none" id="0_2_btn"><img src="images/btn_image/spritemap_up_blue_down_yellow.png">Yellow skiboard</button>
+		<button onclick="NFT0chooseRed()" style="DISPLAY:none" id="0_1_btn"><img src="images/btn_image/spritemap_up_blue_down_red.png">Red skiboard</button>
+		<button onclick="NFT0chooseYellow()" style="DISPLAY:none" id="0_2_btn"><img src="images/btn_image/spritemap_up_blue_down_yellow.png">Yellow skiboard</button>
 
 		<button onclick="NFT1chooseBlue()" style="DISPLAY:none" id="1_0_btn"><img src="images/btn_image/spritemap_up_red_down_blue.png">No skiboard</button>
-		<button style="DISPLAY:none" id="1_1_btn"><img src="images/btn_image/spritemap_up_red_down_red.png">Red skiboard</button>
-		<button style="DISPLAY:none" id="1_2_btn"><img src="images/btn_image/spritemap_up_red_down_yellow.png">Yellow skiboard</button>
+		<button onclick="NFT1chooseRed()" style="DISPLAY:none" id="1_1_btn"><img src="images/btn_image/spritemap_up_red_down_red.png">Red skiboard</button>
+		<button onclick="NFT1chooseYellow()" style="DISPLAY:none" id="1_2_btn"><img src="images/btn_image/spritemap_up_red_down_yellow.png">Yellow skiboard</button>
 
 		<button onclick="NFT2chooseBlue()" style="DISPLAY:none" id="2_0_btn"><img src="images/btn_image/spritemap_up_yellow_down_blue.png">No skiboard</button>
-		<button style="DISPLAY:none" id="2_1_btn"><img src="images/btn_image/spritemap_up_yellow_down_red.png">Red skiboard</button>
-		<button style="DISPLAY:none" id="2_2_btn"><img src="images/btn_image/spritemap_up_yellow_down_yellow.png">Yellow skiboard</button>
+		<button onclick="NFT2chooseRed()" style="DISPLAY:none" id="2_1_btn"><img src="images/btn_image/spritemap_up_yellow_down_red.png">Red skiboard</button>
+		<button onclick="NFT2chooseYellow()" style="DISPLAY:none" id="2_2_btn"><img src="images/btn_image/spritemap_up_yellow_down_yellow.png">Yellow skiboard</button>
 
 
 		<input type="text" id="mytext">
@@ -69,8 +69,12 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.0-beta1/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/admin-lte/3.2.0/js/adminlte.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.3/web3.min.js"></script>
+	<script type="text/javascript" src="skifree.js"></script>
 	<script src="Stickman_ABI.js"></script>
+	<script src="Stickman20_ABI.js"></script>
+	<script src="Stickman1155_ABI.js"></script>
 	<script src="Stickman_Contract.js"></script>
+
 	<script>
 		var web3;
 		var Stickman_contract = null;
@@ -158,8 +162,12 @@
 			console.log("contract_address", contract_address);
 			if (contract_address) {
 				 contract = createContract(contract_address);
-				//$("#contract_address").attr("readonly", true);
-			//	$("#contract_address_btn").attr("disabled", true);
+			}
+
+			var contract_address_1155 = "0xD44A878eaCAA7353F5009AC29607B62d2b5Fb921"
+			console.log("contract_address_1155", contract_address_1155);
+			if (contract_address_1155) {
+				contract_1155 = createContract1155(contract_address_1155);
 			}
 		});
 
@@ -170,6 +178,14 @@
 			UpdateContractData();
 			getTokenData();
 		}
+
+		//建立1155token智能合約實體
+		function createContract1155(address) {
+			Stickman1155_contract = new web3.eth.Contract(Stickman1155_ABI, address, {});
+			console.log("contract", Stickman1155_contract);
+			get1155Data();
+		}
+
 		async function UpdateContractData() {
 			//查詢代幣的名稱
 			var name = await contract_name(Stickman_contract);
@@ -181,7 +197,7 @@
 		}
 
 		let WhichTokenOwner = new Array(3);
-		async function getTokenData() {
+		async function getTokenData() {//檢查721NFT的持有狀況
 
 			for(var i=0;i<3;i++){
 
@@ -193,6 +209,19 @@
 				if((WhichTokenOwner[i]!=undefined)&&(WhichTokenOwner[i]==web3.eth.defaultAccount)) {//判斷每一個Token有沒有Owner，還有判斷現在連結錢包的是不是就是Owner
 					console.log("You have No." + i + " Token");
 					document.getElementById("NFT" + i + "_btn").style.display = "block"; //顯示有的NFT的按鈕
+				}
+			}
+		}
+
+		let Ski_quantity = new Array(2); //紀錄這個使用者每一種滑板有多少個
+		async function get1155Data() {
+			for(var i=1;i<3;i++) {
+				try {
+					Ski_quantity[i-1] = await Stickman1155_contract.methods.balanceOf(web3.eth.defaultAccount, i).call();
+					alert("You have"+data+" No."+i+ "Skiboard");
+				} catch (error) {
+					console.log(error);
+					// alert("Not a ownerOf stickman series");
 				}
 			}
 		}
@@ -211,28 +240,15 @@
 			document.getElementById("NFT2_btn").style.display = "none";
 			document.getElementById("0_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
 
+			//以下為如有滑板則顯示
+			if(Ski_quantity[0]>0){
+				document.getElementById("0_1_btn").style.display = "block";
+			}
+			if(Ski_quantity[1]>0){
+				document.getElementById("0_2_btn").style.display = "block";
+			}
 
-			//拿到1155合約後記得修改
-		}
 
-		function NFT0chooseBlue(){//NFT0+藍滑雪板
-			document.getElementById("0_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
-			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_blue.png';//換遊戲角色圖
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
-		}
-		function NFT1chooseBlue(){//NFT1+藍滑雪板
-			document.getElementById("1_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
-			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_blue.png';//換遊戲角色圖
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
-		}
-
-		function NFT2chooseBlue(){//NFT1+藍滑雪板
-			document.getElementById("1_0_btn").style.display = "none"; //顯示滑雪板選擇按鈕
-			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_blue.png';//換遊戲角色圖
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
 		}
 
 		function NFT1choose(){
@@ -240,7 +256,13 @@
 			document.getElementById("NFT1_btn").style.display = "none";
 			document.getElementById("NFT2_btn").style.display = "none";
 			document.getElementById("1_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
-			//拿到1155合約後記得修改
+			//以下為如有滑板則顯示
+			if(Ski_quantity[0]>0){
+				document.getElementById("1_1_btn").style.display = "block";
+			}
+			if(Ski_quantity[1]>0){
+				document.getElementById("1_2_btn").style.display = "block";
+			}
 		}
 
 		function NFT2choose(){
@@ -248,16 +270,78 @@
 			document.getElementById("NFT1_btn").style.display = "none";
 			document.getElementById("NFT2_btn").style.display = "none";
 			document.getElementById("2_0_btn").style.display = "block"; //顯示滑雪板選擇按鈕
-			//拿到1155合約後記得修改
+			//以下為如有滑板則顯示
+			if(Ski_quantity[0]>0){
+				document.getElementById("2_1_btn").style.display = "block";
+			}
+			if(Ski_quantity[1]>0){
+				document.getElementById("2_2_btn").style.display = "block";
+			}
 		}
+
+		function NFT0chooseBlue(){//NFT0+藍滑雪板
+			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+		function NFT1chooseBlue(){//NFT1+藍滑雪板
+			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT2chooseBlue(){//NFT2+藍滑雪板
+			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_blue.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT0chooseRed(){//NFT0+紅滑雪板
+			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_red.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+		function NFT1chooseRed(){//NFT1+紅滑雪板
+			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_red.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT2chooseRed(){//NFT2+紅滑雪板
+			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_red.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT0chooseYellow(){//NFT0+黃滑雪板
+			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_yellow.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+		function NFT1chooseYellow(){//NFT1+黃滑雪板
+			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_yellow.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+		function NFT2chooseYellow(){//NFT2+黃滑雪板
+			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_yellow.png';//換遊戲角色圖
+			canva.style.display="block";//打開遊戲canva
+			Startgame();
+		}
+
+
+
 
 		function CurrentspriteMapImg(){
 			return spriteMapImgSrc2;
 		}
+
+
 	</script>
 
 	<!-- Load in the JavaScript -->
-	<script type="text/javascript" src="skifree.js"></script>
+
 
     </body>
 </html>

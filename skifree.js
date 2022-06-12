@@ -4,8 +4,21 @@
  * edited by Horden
  */
 
-function Startgame() {
+
+function Startgame(){
+    for(var i=0;i<3;i++) {
+        for(var k=0;k<3;k++){
+            document.getElementById(i+"_"+k+"_btn").style.display = "none";
+        }
+    }
+
+
+
+
+
     var SKI = (function () {
+
+
 
         /**
          * Initialise game variables.
