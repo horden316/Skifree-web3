@@ -1,189 +1,4 @@
-const Stickman1155_ABI= [
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_owner",
-                "type": "address"
-            },
-            {
-                "name": "_id",
-                "type": "uint256"
-            }
-        ],
-        "name": "balanceOf",
-        "outputs": [
-            {
-                "name": "",
-                "type": "uint256"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_id",
-                "type": "uint256"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "ownerTransfer",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [],
-        "name": "init_owner",
-        "outputs": [
-            {
-                "name": "",
-                "type": "address"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "id",
-                "type": "uint256"
-            }
-        ],
-        "name": "getName",
-        "outputs": [
-            {
-                "name": "",
-                "type": "string"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_operator",
-                "type": "address"
-            },
-            {
-                "name": "_approved",
-                "type": "bool"
-            }
-        ],
-        "name": "setApprovalForAll",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_id",
-                "type": "uint256"
-            },
-            {
-                "name": "_value",
-                "type": "uint256"
-            }
-        ],
-        "name": "TransferFrom",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "name",
-                "type": "string"
-            }
-        ],
-        "name": "mint",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": true,
-        "inputs": [
-            {
-                "name": "_owner",
-                "type": "address"
-            },
-            {
-                "name": "_operator",
-                "type": "address"
-            }
-        ],
-        "name": "isApprovedForAll",
-        "outputs": [
-            {
-                "name": "",
-                "type": "bool"
-            }
-        ],
-        "payable": false,
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            {
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "name": "_ids",
-                "type": "uint256[]"
-            },
-            {
-                "name": "_values",
-                "type": "uint256[]"
-            }
-        ],
-        "name": "safeBatchTransferFrom",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
+const Stickman1155_ABI=[
     {
         "inputs": [],
         "payable": false,
@@ -195,31 +10,24 @@ const Stickman1155_ABI= [
         "inputs": [
             {
                 "indexed": true,
+                "internalType": "address",
+                "name": "_owner",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
                 "name": "_operator",
                 "type": "address"
             },
             {
-                "indexed": true,
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "indexed": true,
-                "name": "_to",
-                "type": "address"
-            },
-            {
                 "indexed": false,
-                "name": "_id",
-                "type": "uint256"
-            },
-            {
-                "indexed": false,
-                "name": "_value",
-                "type": "uint256"
+                "internalType": "bool",
+                "name": "_approved",
+                "type": "bool"
             }
         ],
-        "name": "TransferSingle",
+        "name": "ApprovalForAll",
         "type": "event"
     },
     {
@@ -227,26 +35,31 @@ const Stickman1155_ABI= [
         "inputs": [
             {
                 "indexed": true,
+                "internalType": "address",
                 "name": "_operator",
                 "type": "address"
             },
             {
                 "indexed": true,
+                "internalType": "address",
                 "name": "_from",
                 "type": "address"
             },
             {
                 "indexed": true,
+                "internalType": "address",
                 "name": "_to",
                 "type": "address"
             },
             {
                 "indexed": false,
+                "internalType": "uint256[]",
                 "name": "_ids",
                 "type": "uint256[]"
             },
             {
                 "indexed": false,
+                "internalType": "uint256[]",
                 "name": "_values",
                 "type": "uint256[]"
             }
@@ -259,21 +72,204 @@ const Stickman1155_ABI= [
         "inputs": [
             {
                 "indexed": true,
-                "name": "_owner",
-                "type": "address"
-            },
-            {
-                "indexed": true,
+                "internalType": "address",
                 "name": "_operator",
                 "type": "address"
             },
             {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_from",
+                "type": "address"
+            },
+            {
+                "indexed": true,
+                "internalType": "address",
+                "name": "_to",
+                "type": "address"
+            },
+            {
                 "indexed": false,
-                "name": "_approved",
-                "type": "bool"
+                "internalType": "uint256",
+                "name": "_id",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "_value",
+                "type": "uint256"
             }
         ],
-        "name": "ApprovalForAll",
+        "name": "TransferSingle",
         "type": "event"
+    },
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "string",
+                "name": "value",
+                "type": "string"
+            },
+            {
+                "indexed": true,
+                "internalType": "uint256",
+                "name": "id",
+                "type": "uint256"
+            }
+        ],
+        "name": "URI",
+        "type": "event"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "address", "name": "_from", "type": "address" },
+            { "internalType": "address", "name": "_to", "type": "address" },
+            { "internalType": "uint256", "name": "_id", "type": "uint256" },
+            { "internalType": "uint256", "name": "_value", "type": "uint256" }
+        ],
+        "name": "TransferFrom",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            { "internalType": "address", "name": "_owner", "type": "address" },
+            { "internalType": "uint256", "name": "_id", "type": "uint256" }
+        ],
+        "name": "balanceOf",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            { "internalType": "address[]", "name": "_owners", "type": "address[]" },
+            { "internalType": "uint256[]", "name": "_ids", "type": "uint256[]" }
+        ],
+        "name": "balanceOfBatch",
+        "outputs": [
+            { "internalType": "uint256[]", "name": "", "type": "uint256[]" }
+        ],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_initialSupply",
+                "type": "uint256"
+            },
+            { "internalType": "string", "name": "_uri", "type": "string" }
+        ],
+        "name": "create",
+        "outputs": [
+            { "internalType": "uint256", "name": "_id", "type": "uint256" }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "name": "creators",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "init_owner",
+        "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [
+            { "internalType": "address", "name": "_owner", "type": "address" },
+            { "internalType": "address", "name": "_operator", "type": "address" }
+        ],
+        "name": "isApprovedForAll",
+        "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": true,
+        "inputs": [],
+        "name": "nonce",
+        "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+        "payable": false,
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "address", "name": "_to", "type": "address" },
+            { "internalType": "uint256", "name": "_id", "type": "uint256" },
+            { "internalType": "uint256", "name": "_value", "type": "uint256" }
+        ],
+        "name": "ownerTransfer",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "address", "name": "_from", "type": "address" },
+            { "internalType": "address", "name": "_to", "type": "address" },
+            { "internalType": "uint256[]", "name": "_ids", "type": "uint256[]" },
+            { "internalType": "uint256[]", "name": "_values", "type": "uint256[]" },
+            { "internalType": "bytes", "name": "_data", "type": "bytes" }
+        ],
+        "name": "safeBatchTransferFrom",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "address", "name": "_operator", "type": "address" },
+            { "internalType": "bool", "name": "_approved", "type": "bool" }
+        ],
+        "name": "setApprovalForAll",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "internalType": "string", "name": "_uri", "type": "string" },
+            { "internalType": "uint256", "name": "_id", "type": "uint256" }
+        ],
+        "name": "setURI",
+        "outputs": [],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
     }
 ]

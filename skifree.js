@@ -73,7 +73,7 @@ function Startgame(){
                     'y': 100
                 };
                 currentSpeed = 0;
-                maxSpeed = 10;
+                maxSpeed = BaseSpeed();
                 faster = false;
                 stopped = true;
             };
@@ -86,11 +86,11 @@ function Startgame(){
                 invincibilityCount = 15;
                 ctx.font = "20px Georgia";
                 ctx.fillText("Game Over!", (canvas.width / 2) - 100, canvas.height / 2);
-                ctx.fillText("You'll recieve " + Math.floor(distance / 1000) + " coin", (canvas.width / 2) - 100, canvas.height / 2 + 50);
+                ctx.fillText("You'll recieve " + Math.floor(distance / 200) + " coin", (canvas.width / 2) - 100, canvas.height / 2 + 50);
                 console.log("crash");
                 crashed = true;
                 paused = true;
-
+                EndGame_getToken(distance);//呼叫結算合約
                 //canva.style.display="none";
 
                 // Pause the player for a while
@@ -171,7 +171,7 @@ function Startgame(){
 
                 // Update distance
                 updateDistance();
-                document.getElementById("mytext").value = distance;
+                //document.getElementById("mytext").value = distance;//顯示目前的距離
             };
 
             /**
