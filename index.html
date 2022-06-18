@@ -10,8 +10,14 @@
     <body>
 	<div class="topview">
 		<button id="contract_address_btn">Connect Wallet</button>
-		<button id="buytoken_btn">Buy Token</button>
-		<button id="buyskiboard_btn">Buy Skiboard</button>
+		<button onclick="BuyToken()" id="buytoken_btn" style="DISPLAY:none" >Buy Token</button>
+
+
+		<button onclick="BuySkiboard()" style="DISPLAY:none" id="buyskiboard_btn">Buy Skiboard</button>
+		<button onclick="BuyRedSkiboard()" id="BuyRedSkiboard_btn" style="DISPLAY:none" >Buy Red Token*100</button>
+		<button onclick="BuyYellowSkiboard()" id="BuyYellowSkiboard_btn" style="DISPLAY:none" >Buy Yellow Token*100</button>
+
+
 		<button onclick="NFT0choose()" style="DISPLAY:none" id="NFT0_btn"><img src="images/btn_image/spritemap_up_blue_down_blue.png">#0</button>
 		<button onclick="NFT1choose()" style="DISPLAY:none" id="NFT1_btn"><img src="images/btn_image/spritemap_up_red_down_blue.png">#1</button>
 		<button onclick="NFT2choose()" style="DISPLAY:none" id="NFT2_btn"><img src="images/btn_image/spritemap_up_yellow_down_blue.png">#2</button>
@@ -34,7 +40,12 @@
 
 	</div>
 
+
+
 		<div id="wrapper">
+
+
+
 			<h1>SkiFree Web3 Ver.</h1>
 			
 			<canvas width="360" height="480" id="canva"></canvas>
@@ -75,11 +86,13 @@
 	<script src="Stickman_ABI.js"></script>
 	<script src="Stickman20_ABI.js"></script>
 	<script src="Stickman1155_ABI.js"></script>
+	<script src="GameStatus_ABI.js"></script>
 	<script src="Stickman_Contract.js"></script>
 
 	<script>
 		var web3;
 		var Stickman_contract = null;
+		var GameStatus_contract = null;
 		$(async function () {
 			console.log("ethereum", window.ethereum);
 			if (typeof window.ethereum !== "undefined") {
@@ -160,7 +173,7 @@
 
 		//連結合約（按下進入遊戲按鈕後）
 		$("#contract_address_btn").click(async function () {
-			var contract_address = "0xB410A146f8730c486fEef810146d4351a6139fF5"
+			var contract_address = "0x773d5e0537CeAb9724Aa25847727269B1BC01bde"
 			console.log("contract_address", contract_address);
 			if (contract_address) {
 				 contract = createContract(contract_address);
@@ -172,14 +185,25 @@
 				contract_1155 = createContract1155(contract_address_1155);
 			}
 
-			var gamestatus_address = "0xb9a595eA14DeACFC194bf4a17350f937F2E9ddb1"
+			var gamestatus_address = "0xb65338275fC3FDd3191198b30DAf819Fdd7cD003"
 			console.log("gamestatus_address", gamestatus_address);
 			if (gamestatus_address) {
 				contract_gamestatus = createGameStatus(gamestatus_address);
 			}
+			document.getElementById("buytoken_btn").style.display = "block";//顯示buytoken_btn
+			document.getElementById("buytoken_btn").innerText = "Buy Token balance:"+ await GameStatus_contract.methods.erc20balanceOf(web3.eth.defaultAccount).call();
+			document.getElementById("buyskiboard_btn").style.display = "block";
+
+
+
+
+
+
 		});
 
-		//建立智能合約實體
+
+
+		//建立721火柴人智能合約實體
 		function createContract(address) {
 			Stickman_contract = new web3.eth.Contract(Stickman_ABI, address, {});
 			console.log("contract", Stickman_contract);
@@ -198,7 +222,7 @@
 		function createGameStatus(address) {
 			GameStatus_contract = new web3.eth.Contract(GameStatus_ABI, address, {});
 			console.log("contract", GameStatus_contract);
-
+			get1155Data();
 		}
 
 		async function UpdateContractData() {
@@ -232,12 +256,64 @@
 		async function get1155Data() {
 			for(var i=1;i<3;i++) {
 				try {
-					Ski_quantity[i-1] = await Stickman1155_contract.methods.balanceOf(web3.eth.defaultAccount, i).call();
-					alert("You have"+data+" No."+i+ "Skiboard");
+					Ski_quantity[i-1] = await GameStatus_contract.methods.erc1155balanceOf(web3.eth.defaultAccount, i).call();
+					console.log("You have"+Ski_quantity[i-1]+" No."+i+ "Skiboard");
 				} catch (error) {
 					console.log(error);
 					// alert("Not a ownerOf stickman series");
 				}
+			}
+
+			try {
+				document.getElementById("BuyRedSkiboard_btn").innerText = "Buy RedSkiboard balance:"+ Ski_quantity[0];
+			} catch (error) {
+				document.getElementById("BuyRedSkiboard_btn").innerText = "Buy RedSkiboard balance:0";
+			}
+
+
+			try {
+				document.getElementById("BuyYellowSkiboard_btn").innerText = "Buy YellowSkiboard balance:"+ Ski_quantity[1];
+			} catch (error) {
+				document.getElementById("BuyYellowSkiboard_btn").innerText = "Buy YellowSkiboard balance:0";
+			}
+
+
+
+
+		}
+
+
+		async function BuyToken(){
+			var value = web3.utils.toWei("0.01", "ether");
+			try {
+				await GameStatus_contract.methods.buyToken(web3.eth.defaultAccount).send({from: web3.eth.defaultAccount, value: value, gas:1000000});
+			} catch (error) {
+				console.log(error);
+				alert("Buy Token fail");
+			}
+		}
+
+		function BuySkiboard(){
+			document.getElementById("BuyRedSkiboard_btn").style.display = "block";
+			document.getElementById("BuyYellowSkiboard_btn").style.display = "block";
+		}
+
+		async function BuyRedSkiboard(){
+			var value = web3.utils.toWei("0.01", "ether");
+			try {
+				await GameStatus_contract.methods.buySkiBoard(web3.eth.defaultAccount,1).send({from: web3.eth.defaultAccount, value: value, gas:1000000});
+			} catch (error) {
+				console.log(error);
+				alert("Buy Skiboard fail");
+			}
+		}
+		async function BuyYellowSkiboard(){
+			var value = web3.utils.toWei("0.01", "ether");
+			try {
+				await GameStatus_contract.methods.buySkiBoard(web3.eth.defaultAccount,2).send({from: web3.eth.defaultAccount, value: value, gas:1000000});
+			} catch (error) {
+				console.log(error);
+				alert("Buy Skiboard fail");
 			}
 		}
 

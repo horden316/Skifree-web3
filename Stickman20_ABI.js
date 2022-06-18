@@ -266,4 +266,4 @@ const Stickman20_ABI= [
         "name": "Approval",
         "type": "event"
     }
-]
+];

@@ -1,6 +1,17 @@
 const Stickman_ABI=[
     {
-        "inputs": [],
+        "inputs": [
+            {
+                "internalType": "string",
+                "name": "name_",
+                "type": "string"
+            },
+            {
+                "internalType": "string",
+                "name": "symbol_",
+                "type": "string"
+            }
+        ],
         "stateMutability": "nonpayable",
         "type": "constructor"
     },
@@ -10,19 +21,19 @@ const Stickman_ABI=[
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_owner",
+                "name": "owner",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_approved",
+                "name": "approved",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
@@ -35,19 +46,19 @@ const Stickman_ABI=[
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_owner",
+                "name": "owner",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_operator",
+                "name": "operator",
                 "type": "address"
             },
             {
                 "indexed": false,
                 "internalType": "bool",
-                "name": "_approved",
+                "name": "approved",
                 "type": "bool"
             }
         ],
@@ -60,19 +71,19 @@ const Stickman_ABI=[
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_from",
+                "name": "from",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "address",
-                "name": "_to",
+                "name": "to",
                 "type": "address"
             },
             {
                 "indexed": true,
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
@@ -85,23 +96,10 @@ const Stickman_ABI=[
                 "internalType": "address",
                 "name": "to",
                 "type": "address"
-            }
-        ],
-        "name": "_mint",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_approved",
-                "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
@@ -114,7 +112,7 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_owner",
+                "name": "owner",
                 "type": "address"
             }
         ],
@@ -133,7 +131,7 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
@@ -152,12 +150,12 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_owner",
+                "name": "owner",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "_operator",
+                "name": "operator",
                 "type": "address"
             }
         ],
@@ -170,6 +168,32 @@ const Stickman_ABI=[
             }
         ],
         "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [],
+        "name": "maxSupply",
+        "outputs": [
+            {
+                "internalType": "uint32",
+                "name": "",
+                "type": "uint32"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "address",
+                "name": "to",
+                "type": "address"
+            }
+        ],
+        "name": "mint",
+        "outputs": [],
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -189,7 +213,7 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],
@@ -208,49 +232,16 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_from",
+                "name": "operator",
                 "type": "address"
             },
             {
-                "internalType": "address",
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_tokenId",
-                "type": "uint256"
+                "internalType": "bool",
+                "name": "approved",
+                "type": "bool"
             }
         ],
-        "name": "safeTransferFrom",
-        "outputs": [],
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "address",
-                "name": "_from",
-                "type": "address"
-            },
-            {
-                "internalType": "address",
-                "name": "_to",
-                "type": "address"
-            },
-            {
-                "internalType": "uint256",
-                "name": "_tokenId",
-                "type": "uint256"
-            },
-            {
-                "internalType": "bytes",
-                "name": "_data",
-                "type": "bytes"
-            }
-        ],
-        "name": "safeTransferFrom",
+        "name": "setApprovalForAll",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
@@ -259,7 +250,7 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "bytes4",
-                "name": "interfaceId",
+                "name": "interfaceID",
                 "type": "bytes4"
             }
         ],
@@ -271,7 +262,7 @@ const Stickman_ABI=[
                 "type": "bool"
             }
         ],
-        "stateMutability": "pure",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -282,25 +273,6 @@ const Stickman_ABI=[
                 "internalType": "string",
                 "name": "",
                 "type": "string"
-            }
-        ],
-        "stateMutability": "view",
-        "type": "function"
-    },
-    {
-        "inputs": [
-            {
-                "internalType": "uint256",
-                "name": "_index",
-                "type": "uint256"
-            }
-        ],
-        "name": "tokenByIndex",
-        "outputs": [
-            {
-                "internalType": "uint256",
-                "name": "",
-                "type": "uint256"
             }
         ],
         "stateMutability": "view",
@@ -322,7 +294,7 @@ const Stickman_ABI=[
                 "type": "string"
             }
         ],
-        "stateMutability": "pure",
+        "stateMutability": "view",
         "type": "function"
     },
     {
@@ -330,9 +302,9 @@ const Stickman_ABI=[
         "name": "totalSupply",
         "outputs": [
             {
-                "internalType": "uint256",
+                "internalType": "uint32",
                 "name": "",
-                "type": "uint256"
+                "type": "uint32"
             }
         ],
         "stateMutability": "view",
@@ -342,17 +314,17 @@ const Stickman_ABI=[
         "inputs": [
             {
                 "internalType": "address",
-                "name": "_from",
+                "name": "from",
                 "type": "address"
             },
             {
                 "internalType": "address",
-                "name": "_to",
+                "name": "to",
                 "type": "address"
             },
             {
                 "internalType": "uint256",
-                "name": "_tokenId",
+                "name": "tokenId",
                 "type": "uint256"
             }
         ],

@@ -272,4 +272,4 @@ const Stickman1155_ABI=[
         "stateMutability": "nonpayable",
         "type": "function"
     }
-]
+];
