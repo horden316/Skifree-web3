@@ -185,7 +185,7 @@
 				contract_1155 = createContract1155(contract_address_1155);
 			}
 
-			var gamestatus_address = "0xb65338275fC3FDd3191198b30DAf819Fdd7cD003"
+			var gamestatus_address = "0x401FF7912174bca4545b55970Ef0dC484DAAF626"
 			console.log("gamestatus_address", gamestatus_address);
 			if (gamestatus_address) {
 				contract_gamestatus = createGameStatus(gamestatus_address);
@@ -318,14 +318,31 @@
 		}
 
 		async function Pay_to_Startgame(skiboardId) {//付錢來開始遊戲 記得把canva.style.display="block"移過來
-			await GameStatus_contract.methods.startGame(web3.eth.defaultAccount, skiboardId).call();
+			var value = web3.utils.toWei("0", "ether");
+			try {
+				await GameStatus_contract.methods.startGame(web3.eth.defaultAccount,skiboardId).send({from: web3.eth.defaultAccount, value: value, gas:1000000});
+				canva.style.display="block";//打開遊戲canva
+				Startgame();
+			} catch (error) {
+				console.log(error);
+				alert("StartGame fail");
+			}
 
 		}
 
 		async function EndGame_getToken(score) {//結算成績獲取Token
-			GameStatus_contract.methods.getToken(web3.eth.defaultAccount, score).call();
+			var value = web3.utils.toWei("0", "ether");
+			try {
+				await GameStatus_contract.methods.getToken(web3.eth.defaultAccount,parseInt(score)).send({from: web3.eth.defaultAccount, value: value, gas:1000000});
+
+			} catch (error) {
+				console.log(error);
+				alert("Get Token fail"+score);
+			}
 
 		}
+
+
 
 	</script>
 
@@ -383,61 +400,53 @@
 		function NFT0chooseBlue(){//NFT0+藍滑雪板
 			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_blue.png';//換遊戲角色圖
 			basespeed=10;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(0);
+
 		}
 		function NFT1chooseBlue(){//NFT1+藍滑雪板
 			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_blue.png';//換遊戲角色圖
 			basespeed=10;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(0);
 		}
 
 		function NFT2chooseBlue(){//NFT2+藍滑雪板
 			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_blue.png';//換遊戲角色圖
 			basespeed=10;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(0);
 		}
 
 		function NFT0chooseRed(){//NFT0+紅滑雪板
 			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_red.png';//換遊戲角色圖
 			basespeed=15;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(1);
 		}
 		function NFT1chooseRed(){//NFT1+紅滑雪板
 			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_red.png';//換遊戲角色圖
 			basespeed=15;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(1);
 		}
 
 		function NFT2chooseRed(){//NFT2+紅滑雪板
 			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_red.png';//換遊戲角色圖
 			basespeed=15;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(1);
 		}
 
 		function NFT0chooseYellow(){//NFT0+黃滑雪板
 			spriteMapImgSrc2 = 'images/up_blue/spritemap_up_blue_down_yellow.png';//換遊戲角色圖
 			basespeed=20;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(2);
 		}
 		function NFT1chooseYellow(){//NFT1+黃滑雪板
 			spriteMapImgSrc2 = 'images/up_red/spritemap_up_red_down_yellow.png';//換遊戲角色圖
 			basespeed=20;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(2);
 		}
 
 		function NFT2chooseYellow(){//NFT2+黃滑雪板
 			spriteMapImgSrc2 = 'images/up_yellow/spritemap_up_yellow_down_yellow.png';//換遊戲角色圖
 			basespeed=20;
-			canva.style.display="block";//打開遊戲canva
-			Startgame();
+			Pay_to_Startgame(2);
 		}
 
 
