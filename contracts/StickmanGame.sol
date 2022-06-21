@@ -363,14 +363,14 @@ contract GameStatus{
     }
    function getToken(address sender,uint256 score)public
     {
-        require((PlayTimes[msg.sender][block.timestamp/86400])<5);//reruire當日遊玩次數超過5次的
+        require((PlayTimes[msg.sender][block.timestamp/86400])<=10);//reruire當日遊玩次數超過10次的
         uint256 prize=score/200;//1000分換一代幣
         erc20.ownerTransfer(sender,prize);
     }
     function startGame(address sender,uint256 skiboardId) public returns(bool success)//資產滑雪板，nft人物，滑雪板
     {
 
-        require((PlayTimes[msg.sender][block.timestamp/86400])<5);//reruire當日遊玩次數超過5次的
+        require((PlayTimes[msg.sender][block.timestamp/86400])<10);//reruire當日遊玩次數超過10次的
         PlayTimes[msg.sender][block.timestamp/86400]+=1;
 
         erc20.TransferToOwner(sender,1);//燒掉滑雪板，確認他有nft
